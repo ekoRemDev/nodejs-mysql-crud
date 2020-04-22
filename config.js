@@ -2,9 +2,9 @@ var config = {
 	database: {
 		host:	  'localhost', 	// database host
 		user: 	  'root', 		// your database username
-		password: 'root', 		// your database password
+		password: '', 		// your database password
 		port: 	  3306, 		// default MySQL port
-		db: 	  'test' 		// your database name
+		db: 	  'iotinn_customer' 		// your database name
 	},
 	server: {
 		host: '127.0.0.1',

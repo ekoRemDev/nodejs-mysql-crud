@@ -3,6 +3,9 @@ var app = express()
 
 var mysql = require('mysql')
 
+
+var appname  = "ekrem";
+
 /**
  * This middleware provides a consistent API 
  * for MySQL connections during request/response life cycle

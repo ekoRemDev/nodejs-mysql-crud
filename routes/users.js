@@ -4,7 +4,7 @@ var app = express()
 // SHOW LIST OF USERS
 app.get('/', function(req, res, next) {
 	req.getConnection(function(error, conn) {
-		conn.query('SELECT * FROM users ORDER BY id DESC',function(err, rows, fields) {
+		conn.query('SELECT * FROM users ORDER BY id ASC',function(err, rows, fields) {
 			//if(err) throw err
 			if (err) {
 				req.flash('error', err)
@@ -27,18 +27,30 @@ app.get('/', function(req, res, next) {
 app.get('/add', function(req, res, next){	
 	// render to views/user/add.ejs
 	res.render('user/add', {
-		title: 'Add New User',
+		title: 'Add New Record',
 		name: '',
+		surname: '',
 		age: '',
-		email: ''		
+		birthday: '',
+		email: '',
+		address: '',
+		identificationNo: '',
+		history: '',
+		phonenumber: '',
 	})
 })
 
 // ADD NEW USER POST ACTION
 app.post('/add', function(req, res, next){	
 	req.assert('name', 'Name is required').notEmpty()           //Validate name
+	req.assert('surname', 'Surname is required').notEmpty()           //Validate surname
 	req.assert('age', 'Age is required').notEmpty()             //Validate age
+	req.assert('birthday', 'Birthday is required').notEmpty()             //Validate birthday
     req.assert('email', 'A valid email is required').isEmail()  //Validate email
+    req.assert('address', 'address is required').notEmpty()  //Validate address
+    req.assert('identificationNo', 'identificationNo is required').notEmpty()  //Validate identificationNo
+    req.assert('history', 'history is required').notEmpty()  //Validate history
+    req.assert('phonenumber', 'phonenumber is required').notEmpty()  //Validate phonenumber
 
     var errors = req.validationErrors()
     
@@ -55,8 +67,14 @@ app.post('/add', function(req, res, next){
 		********************************************/
 		var user = {
 			name: req.sanitize('name').escape().trim(),
+			surname: req.sanitize('surname').escape().trim(),
 			age: req.sanitize('age').escape().trim(),
-			email: req.sanitize('email').escape().trim()
+			birthday: req.sanitize('birthday').escape().trim(),
+			email: req.sanitize('email').escape().trim(),
+			address: req.sanitize('address').escape().trim(),
+			identificationNo: req.sanitize('identificationNo').escape().trim(),
+			history: req.sanitize('history').escape().trim(),
+			phonenumber: req.sanitize('phonenumber').escape().trim()
 		}
 		
 		req.getConnection(function(error, conn) {
@@ -69,8 +87,14 @@ app.post('/add', function(req, res, next){
 					res.render('user/add', {
 						title: 'Add New User',
 						name: user.name,
+						surname: user.surname,
 						age: user.age,
-						email: user.email					
+						birthday: user.birthday,
+						email: user.email,
+						address: user.address,
+						identificationNo: user.identificationNo,
+						history: user.history,
+						phonenumber: user.phonenumber
 					})
 				} else {				
 					req.flash('success', 'Data added successfully!')
@@ -79,8 +103,14 @@ app.post('/add', function(req, res, next){
 					res.render('user/add', {
 						title: 'Add New User',
 						name: '',
+						surname: '',
 						age: '',
-						email: ''					
+						birthday: '',
+						email: '',
+						address: '',
+						identificationNo: '',
+						history: '',
+						phonenumber: ''
 					})
 				}
 			})
@@ -100,8 +130,14 @@ app.post('/add', function(req, res, next){
         res.render('user/add', { 
             title: 'Add New User',
             name: req.body.name,
+            surname: req.body.surname,
             age: req.body.age,
-            email: req.body.email
+            birthday: req.body.birthday,
+            email: req.body.email,
+            address: req.body.address,
+			identificationNo: req.body.identificationNo,
+			history: req.body.history,
+			phonenumber: req.body.phonenumber,
         })
     }
 })
@@ -124,8 +160,14 @@ app.get('/edit/(:id)', function(req, res, next){
 					//data: rows[0],
 					id: rows[0].id,
 					name: rows[0].name,
+					surname: rows[0].surname,
 					age: rows[0].age,
-					email: rows[0].email					
+					birthday: rows[0].birthday,
+					email: rows[0].email,
+					address: rows[0].address,
+					identificationNo: rows[0].identificationNo,
+					history: rows[0].history,
+					phonenumber: rows[0].phonenumber,
 				})
 			}			
 		})
@@ -135,8 +177,14 @@ app.get('/edit/(:id)', function(req, res, next){
 // EDIT USER POST ACTION
 app.put('/edit/(:id)', function(req, res, next) {
 	req.assert('name', 'Name is required').notEmpty()           //Validate name
+	req.assert('surname', 'Surname is required').notEmpty()           //Validate surname
 	req.assert('age', 'Age is required').notEmpty()             //Validate age
+	req.assert('birthday', 'Birthday is required').notEmpty()             //Validate birthday
     req.assert('email', 'A valid email is required').isEmail()  //Validate email
+    req.assert('address', 'A valid address is required').notEmpty()  //Validate address
+    req.assert('identificationNo', 'A valid identificationNo is required').notEmpty()  //Validate identificationNo
+    req.assert('history', 'A valid history is required').notEmpty()  //Validate history
+    req.assert('phonenumber', 'A valid phonenumber is required').notEmpty()  //Validate phonenumber
 
     var errors = req.validationErrors()
     
@@ -153,8 +201,14 @@ app.put('/edit/(:id)', function(req, res, next) {
 		********************************************/
 		var user = {
 			name: req.sanitize('name').escape().trim(),
+			surname: req.sanitize('surname').escape().trim(),
 			age: req.sanitize('age').escape().trim(),
-			email: req.sanitize('email').escape().trim()
+			birthday: req.sanitize('birthday').escape().trim(),
+			email: req.sanitize('email').escape().trim(),
+			address: req.sanitize('address').escape().trim(),
+			identificationNo: req.sanitize('identificationNo').escape().trim(),
+			history: req.sanitize('history').escape().trim(),
+			phonenumber: req.sanitize('phonenumber').escape().trim()
 		}
 		
 		req.getConnection(function(error, conn) {
@@ -168,8 +222,14 @@ app.put('/edit/(:id)', function(req, res, next) {
 						title: 'Edit User',
 						id: req.params.id,
 						name: req.body.name,
+						surname: req.body.surname,
 						age: req.body.age,
-						email: req.body.email
+						birthday: req.body.birthday,
+						email: req.body.email,
+						address: req.body.address,
+						identificationNo: req.body.identificationNo,
+						history: req.body.history,
+						phonenumber: req.body.phonenumber
 					})
 				} else {
 					req.flash('success', 'Data updated successfully!')
@@ -179,8 +239,14 @@ app.put('/edit/(:id)', function(req, res, next) {
 						title: 'Edit User',
 						id: req.params.id,
 						name: req.body.name,
+						surname: req.body.surname,
 						age: req.body.age,
-						email: req.body.email
+						birthday: req.body.birthday,
+						email: req.body.email,
+						address: req.body.address,
+						identificationNo: req.body.identificationNo,
+						history: req.body.history,
+						phonenumber: req.body.phonenumber
 					})
 				}
 			})
@@ -201,8 +267,14 @@ app.put('/edit/(:id)', function(req, res, next) {
             title: 'Edit User',            
 			id: req.params.id, 
 			name: req.body.name,
+			surname: req.body.surname,
 			age: req.body.age,
-			email: req.body.email
+			birthday: req.body.birthday,
+			email: req.body.email,
+			address: req.body.address,
+			identificationNo: req.body.identificationNo,
+			history: req.body.history,
+			phonenumber: req.body.phonenumber
         })
     }
 })
@@ -210,7 +282,7 @@ app.put('/edit/(:id)', function(req, res, next) {
 // DELETE USER
 app.delete('/delete/(:id)', function(req, res, next) {
 	var user = { id: req.params.id }
-	
+
 	req.getConnection(function(error, conn) {
 		conn.query('DELETE FROM users WHERE id = ' + req.params.id, user, function(err, result) {
 			//if(err) throw err
